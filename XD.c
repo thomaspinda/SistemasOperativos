@@ -50,38 +50,33 @@ void imprimir(puntero cabeza) {
     }
 }
 
-void buscar_por_id(puntero cabeza, int id_buscado) {
-    while (cabeza != NULL) {
-        if (cabeza->id == id_buscado) {
-            printf("Proceso encontrado: ID: %d, Nombre: %s\n", cabeza->id, cabeza->nom);
-            return;
-        }
-        cabeza = cabeza->sig;
-    }
-    printf("Proceso con ID %d no encontrado.\n", id_buscado);
-}
 
 int main() {
     srand(time(NULL));
     int e;
     int i = 0;
-    int id_buscado;
     puntero cabeza;
     cabeza = NULL;
+    int marco1[15];
 
     while (i < 15) {  // 15 iteraciones.
-        e = rand() % 10 + 1;  // ID aleatorio entre 1 y 10 (IDs repetidas).
-        insertar(&cabeza, e, i + 1);  // Se pasa la posición como i + 1.
+        e = rand() % 1000 + 1;  // ID aleatorio entre 1 y 1000
+
+        // Inserta en la lista enlazada
+        insertar(&cabeza, e, i + 1);
+
+        // Almacena el ID en el array marco1
+        marco1[i] = cabeza -> id;
+
         i++;
     }
-
     printf("Lista de procesos:\n");
     imprimir(cabeza);
 
-    printf("\nIngrese el ID del proceso a buscar: ");
-    scanf("%d", &id_buscado);
-
-    buscar_por_id(cabeza, id_buscado);
+    printf("\nIDs en el array marco1:\n");
+    for (int j = 0; j < 15; j++) {
+        printf("marco1[%d] = %d\n", j, marco1[j]);
+    }
 
     return 0;
 }
