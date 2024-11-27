@@ -58,6 +58,8 @@ int main() {
     puntero cabeza;
     cabeza = NULL;
     int marco1[15];
+    int marco2[15];
+    int marco3[15];
 
     while (i < 15) {  // 15 iteraciones.
         e = rand() % 1000 + 1;  // ID aleatorio entre 1 y 1000
@@ -66,7 +68,10 @@ int main() {
         insertar(&cabeza, e, i + 1);
 
         // Almacena el ID en el array marco1
+
         marco1[i] = cabeza -> id;
+
+
 
         i++;
     }
@@ -74,9 +79,8 @@ int main() {
     imprimir(cabeza);
 
     printf("\nIDs en el array marco1:\n");
-    for (int j = 0; j < 15; j++) {
-        printf("marco1[%d] = %d\n", j, marco1[j]);
+    for (int i = 0; i < 15; i++) {
+        printf("marco1[%d] = %d\n", i, marco1[i]);
     }
-
     return 0;
 }
