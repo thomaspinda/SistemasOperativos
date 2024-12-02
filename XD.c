@@ -5,8 +5,8 @@
 
 typedef struct proc {
     char nom[20];       // Arreglo para almacenar el nombre.
-    int id;             // ID del proceso
-    struct proc *sig;   // Nodo siguiente
+    int id;             // ID del proceso.
+    struct proc *sig;   // Nodo siguiente.
 } nproc;
 
 typedef nproc *puntero;
@@ -23,6 +23,7 @@ char *buscar_nombre(puntero cabeza, int id_buscado) {
     return NULL;  // ID no encontrada.
 }
 
+// Inserta un nuevo nodo al inicio de la lista enlazada.
 void insertar(puntero *cabeza, int e, int posicion) {
     puntero nuevo;
     nuevo = malloc(sizeof(nproc));
@@ -43,6 +44,7 @@ void insertar(puntero *cabeza, int e, int posicion) {
     *cabeza = nuevo;
 }
 
+// Imprime la lista enlazada.
 void imprimir(puntero cabeza) {
     while (cabeza != NULL) {
         printf("ID: %4d, %s\n", cabeza->id, cabeza->nom);
@@ -50,6 +52,41 @@ void imprimir(puntero cabeza) {
     }
 }
 
+// Implementa el algoritmo FIFO para el manejo de páginas.
+int fifo(puntero cabeza, int num_marcos) {
+    int marcos[num_marcos]; // Array para almacenar los marcos.
+    int fallos = 0;         // Contador de fallos de página.
+    int indice = 0;         // Índice circular para reemplazo.
+
+    // Inicializa los marcos con -1 (indicando que están vacíos).
+    for (int i = 0; i < num_marcos; i++) {
+        marcos[i] = -1;
+    }
+
+    while (cabeza != NULL) {
+        int pagina = cabeza->id; // Página actual.
+        int encontrada = 0;      // Bandera para verificar si la página ya está en los marcos.
+
+        // Verifica si la página ya está en los marcos.
+        for (int i = 0; i < num_marcos; i++) {
+            if (marcos[i] == pagina) {
+                encontrada = 1;
+                break;
+            }
+        }
+
+        if (!encontrada) {
+            // Fallo de página: Reemplaza usando FIFO.
+            marcos[indice] = pagina;
+            indice = (indice + 1) % num_marcos; // Incrementa el índice de manera circular.
+            fallos++;
+        }
+
+        cabeza = cabeza->sig; // Avanza al siguiente nodo.
+    }
+
+    return fallos;
+}
 
 int main() {
     srand(time(NULL));
@@ -57,30 +94,25 @@ int main() {
     int i = 0;
     puntero cabeza;
     cabeza = NULL;
-    int marco1[15];
-    int marco2[15];
-    int marco3[15];
 
-    while (i < 15) {  // 15 iteraciones.
-        e = rand() % 1000 + 1;  // ID aleatorio entre 1 y 1000
+    // Genera 15 procesos con IDs aleatorios.
+    while (i < 15) {
+        e = rand() % 10 + 1;  // ID aleatorio entre 1 y 1000.
 
-        // Inserta en la lista enlazada
+        // Inserta en la lista enlazada.
         insertar(&cabeza, e, i + 1);
-
-        // Almacena el ID en el array marco1
-
-        marco1[i] = cabeza -> id;
-
-
 
         i++;
     }
+
     printf("Lista de procesos:\n");
     imprimir(cabeza);
 
-    printf("\nIDs en el array marco1:\n");
-    for (int i = 0; i < 15; i++) {
-        printf("marco1[%d] = %d\n", i, marco1[i]);
-    }
+    // Ejecuta el algoritmo FIFO con un número de marcos fijo.
+    int num_marcos = 3; // Número de marcos disponibles.
+    int fallos = fifo(cabeza, num_marcos);
+
+    printf("\nNúmero total de fallos de página: %d\n", fallos);
+
     return 0;
 }
