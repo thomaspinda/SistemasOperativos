@@ -71,8 +71,10 @@ int fifo(puntero cabeza, int num_marcos) {
         for (int i = 0; i < num_marcos; i++) {
             if (marcos[i] == pagina) {
                 encontrada = 1;
+                
                 break;
             }
+            printf("%d ",marcos[i]);
         }
 
         if (!encontrada) {
@@ -84,8 +86,8 @@ int fifo(puntero cabeza, int num_marcos) {
 
         cabeza = cabeza->sig; // Avanza al siguiente nodo.
     }
-
-    return fallos;
+    printf("\n %d \n", fallos);
+    return 0;
 }
 
 int main() {
@@ -110,9 +112,7 @@ int main() {
 
     // Ejecuta el algoritmo FIFO con un número de marcos fijo.
     int num_marcos = 3; // Número de marcos disponibles.
-    int fallos = fifo(cabeza, num_marcos);
-
-    printf("\nNúmero total de fallos de página: %d\n", fallos);
+    fifo(cabeza, num_marcos);
 
     return 0;
 }
